@@ -30,7 +30,7 @@ def _generatePointsOnCircle(radius, num_points):
     Returns:
         np.ndarray: Array of points.
     """
-    engine = PoissonDisk(d=2, radius=radius, seed=None, ncandidates=num_points*10)  # Smaller radius for denser packing
+    engine = PoissonDisk(d=2, radius=radius, seed=None, ncandidates=num_points*40)  # Smaller radius for denser packing
     sample = engine.random(num_points)
     return sample
 
@@ -145,7 +145,7 @@ def _displayMap(points, paths, start, end):
     # plot lines as arrows in the direction of the path
     for path in paths:
         for i in range(len(path) - 1):
-            plt.arrow(points[path[i], 0], points[path[i], 1], points[path[i+1], 0] - points[path[i], 0], points[path[i+1], 1] - points[path[i], 1], head_width=0.001, head_length=0.001, fc='k', ec='k')
+            plt.arrow(points[path[i], 0], points[path[i], 1], points[path[i+1], 0] - points[path[i], 0], points[path[i+1], 1] - points[path[i], 1], head_width=0.02, head_length=0.02, fc='k', ec='k')
             
     
     plt.show()
@@ -176,7 +176,7 @@ def _reindexGraphPaths(points, paths, graph, start, end):
     return new_points, new_paths, new_graph, new_start, new_end
 
 def generateMap(num_points=50, num_paths=5):
-    radius = num_points / 5000  # Dynamic radius based on the number of points
+    radius = num_points / 1000  # Dynamic radius based on the number of points
     points = _generatePointsOnCircle(radius, num_points)
     start_idx = np.argmin(points[:, 1])  # Start at the lowest y-coordinate
     end_idx = np.argmax(points[:, 1])    # End at the highest y-coordinate
