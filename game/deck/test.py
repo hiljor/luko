@@ -1,32 +1,14 @@
-from deck import Card, CardType, Deck
+from deck import Deck
 from battle import Battle, BattleResult
-
-rock = Card("rock",CardType.ROCK,1)
-paper = Card("paper",CardType.PAPER,1)
-scissors = Card("scissors",CardType.SCISSORS,1)
+from cards import cardlist
 
 battle = Battle()
 
-all_cards = Deck(200,False)
 player_deck = Deck(52)
 hand = Deck(3)
 
-print(all_cards.add(rock))
-print(all_cards.add(rock))
-print(all_cards.add(rock))
-print(all_cards.add(rock))
-print(all_cards.add(paper))
-
-player_deck.add(rock)
-player_deck.add(rock)
-player_deck.add(rock)
-player_deck.add(paper)
-player_deck.add(paper)
-player_deck.add(paper)
-player_deck.add(scissors)
-player_deck.add(scissors)
-player_deck.add(scissors)
-player_deck.add(scissors)
+for i in range(52):
+    player_deck.add(cardlist.find(1))
 
 player_deck.shuffle()
 for i in range(hand.total()):
@@ -43,8 +25,8 @@ for i in range(hand.count()):
 userinput = int(input("Select the number of the card: "))
 user_card = hand.pop(userinput)
 print("\n")
-enemy_card = all_cards.view()
+cardlist.shuffle()
+enemy_card = cardlist.view(0)
 print("enemy picked: " + enemy_card.name)
-all_cards.shuffle()
 result = battle.fight(user_card, enemy_card)
 print(result)

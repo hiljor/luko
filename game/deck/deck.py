@@ -19,8 +19,9 @@ class CardType(Enum):
     SCISSORS = 2
 
 class Card:
-    def __init__(self, name: str, card_type: CardType, bigness: int):
+    def __init__(self, name: str, id: int, card_type: CardType, bigness: int):
         self.name = name
+        self.id = id
         self.card_type = card_type
         self.bigness = bigness
         #self.level =
@@ -52,6 +53,12 @@ class Deck:
         self.stack.pop(index)
         return card
     def view(self, index=0):
+
         return self.stack[index]
     def shuffle(self):
         random.shuffle(self.stack)
+    def find(self, card_id: int, start: int =0):
+        for i in range(start, len(self.stack)):
+            if self.stack[i].id == card_id:
+                return self.stack[i]
+        return False
