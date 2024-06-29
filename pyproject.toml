@@ -8,6 +8,8 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.12"
 pygame = "^2.6.0"
+scipy = "^1.14.0"
+matplotlib = "^3.9.0"
 
 
 [build-system]
