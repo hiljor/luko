@@ -1,4 +1,4 @@
-from room import Room, room_types
+from .room import Room, room_types
 import random
 
 

@@ -1,5 +1,5 @@
-from builder import generateMap
-import roomFactory
+from .builder import generateMap
+from maps import roomFactory
 import pygame
 
 class Map:

@@ -32,7 +32,7 @@ while running:
     #               -> Save Death
 
     screen.fill((30, 30, 30))
-    font = pygame.font.Font('PixelScript.ttf', 20)
+    font = pygame.font.Font('game/PixelScript.ttf', 20)
     hello_text = font.render("Hello, World",1,(200,200,200))
     current_map.render(screen)
     pygame.draw.circle(screen, (0, 0, 255), (250, 250),75)

@@ -1,4 +1,4 @@
-from maps.maps import Map
+from .maps import Map
 
 class MapFactory:
     
