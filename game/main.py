@@ -11,10 +11,10 @@ while running:
             running = False
 
 
-    #GameLoop?
-    #   Intro Screen
-    #   Create Character
-    #   StartLocationEvent
+    #MainGameLoop?
+    #   Intro Screen        }  We can probably
+    #   Create Character    }  Ignore these
+    #   StartLocationEvent  }  for now
     #   Map Screen
     #       -> LocationEvent
     #           -> CheckPlayHealth/Sanity
@@ -25,4 +25,4 @@ while running:
     pygame.draw.circle(screen, (0, 0, 255), (250, 250),75)
     pygame.display.flip()
 
-pygame.quit()      
+pygame.quit()
