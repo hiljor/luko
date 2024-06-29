@@ -1,5 +1,6 @@
 from builder import generateMap
 import roomFactory
+import pygame
 
 class Map:
     
@@ -49,3 +50,10 @@ class Map:
             self.current = next_location
             return True
         return False
+    
+    def render(self, screen):
+        for i in range(len(self.points)):
+            pygame.draw.circle(screen, (0, 0, 0), self.points[i] * self.scale, 5)
+        
+        for i in range(len(self.path) - 1):
+            pygame.draw.line(screen, (0, 0, 0), self.points[self.path[i]] * self.scale, self.points[self.path[i+1]] * self.scale, 2)
