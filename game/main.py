@@ -1,7 +1,11 @@
 import pygame
+from maps.mapFactory import MapFactory
 
 pygame.init()
 screen = pygame.display.set_mode([500, 500])
+
+mapFactory = MapFactory()
+current_map = mapFactory.new_map(5, 50, 2)
 
 running = True
 while running:
@@ -22,6 +26,7 @@ while running:
     #               -> Save Death
 
     screen.fill((255, 255, 255))
+    current_map.render(screen)
     pygame.draw.circle(screen, (0, 0, 255), (250, 250),75)
     pygame.display.flip()
 
