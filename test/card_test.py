@@ -1,6 +1,7 @@
-from deck import Deck
-from battle import Battle, BattleResult
-from cards import cardlist
+from .deck import Deck
+from .battle import Battle, BattleResult
+from .cards import cardlist
+import random
 
 battle = Battle()
 
@@ -8,7 +9,12 @@ player_deck = Deck(52)
 hand = Deck(3)
 
 for i in range(52):
-    player_deck.add(cardlist.find(1))
+
+    card = cardlist.find(random.randrange(3))
+    if card == False:
+        print("Card does not exist")
+    else:
+        player_deck.add(card)
 
 player_deck.shuffle()
 for i in range(hand.total()):

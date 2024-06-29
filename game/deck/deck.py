@@ -57,7 +57,8 @@ class Deck:
         return self.stack[index]
     def shuffle(self):
         random.shuffle(self.stack)
-    def find(self, card_id: int, start: int =0):
+
+    def find(self, card_id: int, start: int = 0):
         for i in range(start, len(self.stack)):
             if self.stack[i].id == card_id:
                 return self.stack[i]

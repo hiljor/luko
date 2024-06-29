@@ -1,4 +1,4 @@
-from deck import Card, CardType, Deck
+from .deck import Card, CardType, Deck
 
 cardlist = Deck(200,False)
 
