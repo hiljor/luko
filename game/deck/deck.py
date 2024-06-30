@@ -34,6 +34,13 @@ class Deck:
         self.stack = []
         self.max = max
         self.allow_duplicates = duplicate
+        self.idcount = 0
+
+
+    def cid(self):
+        id_count = self.idcount
+        self.idcount += 1
+        return id_count
 
     def total(self):
         return self.max
@@ -53,13 +60,17 @@ class Deck:
         self.stack.pop(index)
         return card
     def view(self, index=0):
-
         return self.stack[index]
+
     def shuffle(self):
         random.shuffle(self.stack)
 
     def find(self, card_id: int, start: int = 0):
         for i in range(start, len(self.stack)):
             if self.stack[i].id == card_id:
+                print(i)
+                print(self.stack[i].id)
+                print(self.stack[i].name)
                 return self.stack[i]
+        print(card_id)
         return False
