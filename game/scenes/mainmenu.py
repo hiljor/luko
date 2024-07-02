@@ -1,4 +1,5 @@
 import pygame
+from fonts.fontManager import load_font
 
 class MainMenuScene:
     def __init__(self):
@@ -9,9 +10,9 @@ class MainMenuScene:
         self.gamename3_text_value = "Jongunpo"
         self.start_text_value = "Enter"
         self.quit_text_value = "quit"
-        self.gamename_font = pygame.font.Font('./PixelScript.ttf', 50)
-        self.start_font = pygame.font.Font('./PixelScript.ttf', 30)
-        self.quit_font = pygame.font.Font('./PixelScript.ttf', 20)
+        self.gamename_font = load_font('PixelScript', 50)
+        self.start_font = load_font('PixelScript', 30)
+        self.quit_font = load_font('PixelScript', 20)
 
         self.gamename1_text = self.gamename_font.render(self.gamename1_text_value,1,(200,200,200))
         self.gamename2_text = self.gamename_font.render(self.gamename2_text_value,1,(200,200,200))

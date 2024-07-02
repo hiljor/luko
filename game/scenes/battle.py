@@ -1,4 +1,5 @@
 import pygame
+from fonts.fontManager import load_font
 
 class BattleScene:
     def __init__(self):
@@ -13,10 +14,10 @@ class BattleScene:
         self.card1_opp_text_value = "rock"
         self.card2_opp_text_value = "paper"
         self.card3_opp_text_value = "scissors"
-        self.hello_font = pygame.font.Font('./PixelScript.ttf', 20)
+        self.hello_font = load_font('PixelScript', 20)
         self.deck_text = self.hello_font.render("Battle",1,(200,200,200))
-        self.card_font = pygame.font.Font('./PixelScript.ttf', 20)
-        self.card_opp_font = pygame.font.Font('./PixelScript.ttf', 18)
+        self.card_font = load_font('PixelScript', 20)
+        self.card_opp_font = load_font('PixelScript', 18)
         self.card1_text = self.card_font.render(self.card1_text_value,1,(200,200,200))
         self.card2_text = self.card_font.render(self.card2_text_value,1,(200,200,200))
         self.card3_text = self.card_font.render(self.card3_text_value,1,(200,200,200))

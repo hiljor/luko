@@ -1,6 +1,7 @@
 import pygame
 from enum import Enum
 from scenemanager import SceneManager
+from fonts.fontManager import load_font
 
 pygame.init()
 pygame.font.init()
@@ -16,9 +17,9 @@ scenemanager = SceneManager()
 #DEBUG  MENU
 debug_pos_x = 150
 debug_pos_y = 250
-title_debug_font = pygame.font.Font('./PixelScript.ttf', 15)
+title_debug_font = load_font('PixelScript', 20)
 title_debug_text = title_debug_font.render("Menu",0,(200,200,200))
-debug_font = pygame.font.Font('./PixelScript.ttf', 20)
+debug_font = load_font('PixelScript', 20)
 debug_text1 = debug_font.render("q to quit",1,(0,0,0))
 debug_text2 = debug_font.render("left bracket previous scene",1,(0,0,0))
 debug_text3 = debug_font.render("right bracket scene",1,(0,0,0))

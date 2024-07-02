@@ -1,4 +1,5 @@
 import pygame
+from fonts.fontManager import load_font
 
 class IntroScene:
     def __init__(self):
@@ -12,7 +13,7 @@ class IntroScene:
         pass
 
     def render(self, screen):
-        logo_font = pygame.font.Font('./PixelScript.ttf', 40)
+        logo_font = load_font('PixelScript', 40)
         logo_text = logo_font.render("Luko Games",1,(200,200,200))
         screen.fill(self.bg_colour)
         pygame.draw.circle(screen, (100, 150, 230), (198, 196),78)

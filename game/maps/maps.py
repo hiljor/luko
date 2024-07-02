@@ -1,5 +1,5 @@
 from .mapGenerator import generate_map
-from maps import roomFactory
+from .room import RoomFactory
 import pygame
 import numpy as np
 
@@ -20,15 +20,15 @@ class Map:
         self.selected = self.starts[0]
         
     def _generate_rooms(self):
-        f = roomFactory()
+        rf = RoomFactory()
         for i in range(len(self.points)):
-            self.rooms[i] = f.newRoom()
+            self.rooms[i] = rf.newRoom()
             # add boss room at end point location
             if self.points[i] == self.end:
-                self.rooms[i] = f.newRoom('boss')
+                self.rooms[i] = rf.newRoom('boss')
             # add start room at start point location
             if self.points[i] in self.starts:
-                self.rooms[i] = f.newRoom('start')
+                self.rooms[i] = rf.newRoom('start')
     
     def choose_location(self):
         self.path.append(self.selected)
