@@ -1,4 +1,4 @@
-from deck import Card,CardType
+from .deck import Card,CardType
 from enum import Enum
 
 class BattleResult(Enum):
