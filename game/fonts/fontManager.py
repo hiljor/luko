@@ -1,7 +1,7 @@
 import pygame
 import os
 
-def load_font(filename, size):
+def load_font(filename, size=20):
     # Ensure the filename ends with '.ttf'
     if not filename.endswith('.ttf'):
         filename += '.ttf'
