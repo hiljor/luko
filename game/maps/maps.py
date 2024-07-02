@@ -1,59 +1,102 @@
-from .builder import generateMap
+from .mapGenerator import generate_map
 from maps import roomFactory
 import pygame
+import numpy as np
 
 class Map:
     
-    def __init__(self, n_paths, n_points, scale=1.0):
+    def __init__(self, rows, cols, n_paths):
+        self.rows = rows
+        self.cols = cols
         self.n_paths = n_paths
-        self.n_points = n_points
-        self.scale = scale
         
-        graph, points, _, start, end = generateMap(n_points, n_paths)
+        self.points, self.edges, self.neighbours, self.starts, self.end = generate_map(10, 8, 5)
         
         self.rooms = {}
         
-        self.graph = graph
-        self.points = points
-        self.path = [start]
-        self.start = start
-        self.end = end
-        self.current = start
+        self.current = None
+        self.nexts = sorted(self.starts)
+        self.path = []
+        self.selected = self.starts[0]
         
     def _generate_rooms(self):
         f = roomFactory()
         for i in range(len(self.points)):
             self.rooms[i] = f.newRoom()
+            # add boss room at end point location
+            if self.points[i] == self.end:
+                self.rooms[i] = f.newRoom('boss')
+            # add start room at start point location
+            if self.points[i] in self.starts:
+                self.rooms[i] = f.newRoom('start')
+    
+    def choose_location(self):
+        self.path.append(self.selected)
+        self.current = self.selected
+        if self.current == self.end:
+            return
+        self.selected = self.neighbours[self.current][0]
+        self.nexts = sorted(self.neighbours[self.current])
         
-    
-    def get_current_location(self):
-        return self.points[self.current] * self.scale
-    
-    def get_all_rooms(self):
-        return [(i, self.points[i] * self.scale, self.rooms[i]) for i in range(len(self.points))]
-    
-    def get_path_points(self):
-        return [self.points[i] * self.scale for i in self.path]
-    
-    def get_end_location(self):
-        return self.points[self.end] * self.scale
-    
-    def get_start_location(self):
-        return self.points[self.start] * self.scale
-    
-    def get_next_locations(self):
-        return [(i, self.points[i] * self.scale) for i in self.graph[self.current]]
-    
-    def choose_next_location(self, next_location):
-        if next_location in self.graph[self.current]:
-            self.path.append(next_location)
-            self.current = next_location
-            return True
-        return False
+        # return event for room
+        return self.rooms[self.points.index(self.current)].getEvent()
+        
+    def swap_selected_location(self, direction):
+        index = self.nexts.index(self.selected)
+        index = (index + direction + len(self.nexts)) % len(self.nexts)
+        self.selected = self.nexts[index]
+        
     
     def render(self, screen):
-        for i in range(len(self.points)):
-            pygame.draw.circle(screen, (0, 0, 0), self.points[i] * self.scale, 5)
-        
+        width = screen.get_width() - 100  # Subtracting buffer from total width
+        height = screen.get_height() - 100  # Subtracting buffer from total height
+
+        buffer = 50  # Buffer offset for initial point
+
+        # Calculate grid dimensions with buffer
+        grid_width = width + buffer
+        grid_height = height + buffer
+
+        # Draw all paths between points
+        for edge in self.edges:
+            pygame.draw.line(screen, (255, 255, 255),
+                            (buffer + edge[0][1] * grid_height / self.rows, buffer + edge[0][0] * grid_width / self.cols),
+                            (buffer + edge[1][1] * grid_height / self.rows, buffer + edge[1][0] * grid_width / self.cols))
+
+        # Draw the current path
         for i in range(len(self.path) - 1):
-            pygame.draw.line(screen, (0, 0, 0), self.points[self.path[i]] * self.scale, self.points[self.path[i+1]] * self.scale, 2)
+            pygame.draw.line(screen, (255, 0, 0),
+                            (buffer + self.path[i][1] * grid_height / self.rows, buffer + self.path[i][0] * grid_width / self.cols),
+                            (buffer + self.path[i + 1][1] * grid_height / self.rows, buffer + self.path[i + 1][0] * grid_width / self.cols))
+
+        # Draw all points
+        for point in self.points:
+            pygame.draw.circle(screen, (255, 255, 255),
+                            (buffer + int(point[1] * grid_height / self.rows), buffer + int(point[0] * grid_width / self.cols)), 5)
+
+        # Highlight current location
+        if self.current is not None:
+            pygame.draw.circle(screen, (255, 0, 0),
+                            (buffer + int(self.current[1] * grid_height / self.rows), buffer + int(self.current[0] * grid_width / self.cols)), 10, 3)
+
+        # Highlight neighbors
+        if self.current is not None:
+            for neighbour in self.neighbours[self.current]:
+                color = (255, 255, 0) if neighbour == self.selected else (255, 255, 255)
+                pygame.draw.circle(screen, color,
+                                (buffer + int(neighbour[1] * grid_height / self.rows), buffer + int(neighbour[0] * grid_width / self.cols)), 10, 3)
+        else:
+            for start in self.starts:
+                color = (255, 255, 0) if start == self.selected else (255, 255, 255)
+                pygame.draw.circle(screen, color,
+                                (buffer + int(start[1] * grid_height / self.rows), buffer + int(start[0] * grid_width / self.cols)), 10, 3)
+                    
+            
+
+class MapFactory:
+    
+    def __init__(self):
+        return
+        
+    def new_map(self, rows, cols, n_paths):
+        return Map(rows, cols, n_paths)
