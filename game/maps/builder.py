@@ -63,16 +63,17 @@ def _convertToGraph(tri):
         dict: Graph representation of the triangulation.
     """
     points = tri.points
-    graph = {i: set() for i in range(len(points))} # Adjacency list representation
+    graph = {i: [] for i in range(len(points))}  # Adjacency list representation
 
     # Add edges between points in each simplex, directed graph (both directions, not a DAG)
     for simplex in tri.simplices:
         for i in simplex:
             for j in simplex:
                 if i != j:
-                    graph[i].add(j)
+                    graph[i].append(j)
 
     return graph
+
 
 
 # A* pathfinding with path exclusion in subsequent iterations
@@ -119,8 +120,8 @@ def _findPaths(tri, num_paths, start, end, removal_probability=0.8):
             paths.append(result_path)
             for i in range(len(result_path) - 1):
                 if random.random() < removal_probability:  # Remove with a given probability
-                    graph[result_path[i]].discard(result_path[i + 1])
-                    graph[result_path[i + 1]].discard(result_path[i])
+                    graph[result_path[i]].remove(result_path[i + 1])
+                    graph[result_path[i + 1]].remove(result_path[i])
         else:
             break
 
@@ -177,18 +178,57 @@ def _reindexGraphPaths(points, paths, graph, start, end):
 
 def generateMap(num_points=50, num_paths=5):
     radius = num_points / 1000  # Dynamic radius based on the number of points
-    points = _generatePointsOnCircle(radius, num_points)
-    start_idx = np.argmin(points[:, 1])  # Start at the lowest y-coordinate
-    end_idx = np.argmax(points[:, 1])    # End at the highest y-coordinate
-    triangulation = _applyDelaunayTriangulation(points)
-    paths, graph = _findPaths(triangulation, num_paths, start_idx, end_idx)
+    paths_generated = 0
+    
+    while paths_generated < num_paths:
+        points = _generatePointsOnCircle(radius, num_points)
+        start_idx = np.argmin(points[:, 1])  # Start at the lowest y-coordinate
+        end_idx = np.argmax(points[:, 1])    # End at the highest y-coordinate
+        triangulation = _applyDelaunayTriangulation(points)
+        paths, graph = _findPaths(triangulation, num_paths, start_idx, end_idx)
+        paths_generated = len(paths)
 
-    if paths:
-        # Reindex graph and paths to include only points in the found paths, also adjust start and end points
-        points, paths, graph, new_start, new_end = _reindexGraphPaths(points, paths, graph, start_idx, end_idx)
+    # Reindex graph and paths to include only points in the found paths, also adjust start and end points
+    points, paths, graph, new_start, new_end = _reindexGraphPaths(points, paths, graph, start_idx, end_idx)
+    graph = _get_DAG(points, paths)
+    
+    # Add extra connectivity between paths from left to right
+    graph = _add_extra_connectivity(graph, points, paths, radius=radius)
+    
 
     return graph, points, paths, new_start, new_end
 
+
+def _add_extra_connectivity(graph, points, paths, extra_connectivity=1, radius=0.05):
+    for i in range(len(paths) - 1):
+        path1 = paths[i]
+        path2 = paths[i + 1]
+        # ensure path1 is shorter than path2
+        if len(path1) > len(path2):
+            path1, path2 = path2, path1
+        # connect the paths
+        for _ in range(extra_connectivity):
+            rand_i = random.randint(1, len(path1) - 2)
+            point1 = path1[rand_i]
+            point2 = path2[rand_i+1]
+            if point2 not in graph[point1]: # check if the edge already exists
+                if point2 > point1 + radius/2: # check if point2 is higher than point1
+                    distance = _heuristic(points[point1], points[point2])
+                    if distance <= 1.5 * radius: # check if distance is within the limit
+                        graph[point1].append(point2)
+            elif point1 not in graph[point2]:
+                if point1 > point2 + radius/2: # check if point1 is higher than point2
+                    distance = _heuristic(points[point2], points[point1])
+                    if distance <= 1.5 * radius: # check if distance is within the limit
+                        graph[point2].append(point1)
+    return graph
+
+def _get_DAG(points, paths):
+    graph = {i: [] for i in range(len(points))}  # Adjacency list representation
+    for path in paths:
+        for i in range(len(path) - 1):
+            graph[path[i]].append(path[i+1])
+    return graph
 
 # Main function to generate and display the map
 if __name__ == "__main__":
