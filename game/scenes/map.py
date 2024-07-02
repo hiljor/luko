@@ -13,9 +13,9 @@ class MapScene:
 
     def handle_input(self, event):
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
+            if event.key == pygame.K_LEFT or event.key == pygame.K_h:
                 self.current_map.swap_selected_location(-1)
-            elif event.key == pygame.K_RIGHT:
+            elif event.key == pygame.K_RIGHT or event.key == pygame.K_l:
                 self.current_map.swap_selected_location(1)
             elif event.key == pygame.K_RETURN:
                 self.current_map.choose_location()
@@ -24,6 +24,7 @@ class MapScene:
         pass
 
     def render(self, screen):
+        screen.fill(self.bg_colour)
         width = screen.get_width() - 100  # Subtracting buffer from total width
         height = screen.get_height() - 100  # Subtracting buffer from total height
 

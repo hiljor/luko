@@ -8,16 +8,7 @@ from scenes.battle import BattleScene
 from scenes.gameover import GameOver
 from scenes.credits import CreditScene
 from scenes.m import MScene
-
-class Scene(Enum):
-    INTRO = 0
-    MAINMENU = 1
-    MAP = 2
-    ROOM = 3
-    BATTLE = 4
-    GAMEOVER = 5
-    CREDITS = 6
-    M = 7
+from common import Scene
 
 class SceneManager:
     def __init__(self):
@@ -47,7 +38,9 @@ class SceneManager:
         return next_scene_name
 
     def update(self):
-        self.scenes[self.current_scene].update()
+        next_scene_name = self.scenes[self.current_scene].update()
+        if next_scene_name != 'quit' and next_scene_name in self.scenes:
+            self.current_scene = next_scene_name
 
     def render(self, screen):
         self.scenes[self.current_scene].render(screen)

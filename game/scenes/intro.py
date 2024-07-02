@@ -1,16 +1,32 @@
 import pygame
 from fonts.fontManager import load_font
+from common import Scene
 
 class IntroScene:
     def __init__(self):
         self.bg_colour = (30, 30, 30)
         self.fg_colour = (0, 0, 30)
+        self.playaudio = 0
+        self.audio = pygame.mixer.Sound("./audio/placeholder_song-ko.wav")
+        self.audio.set_volume(0.7)
+        self.clock = pygame.time.get_ticks()
+        
+    def init(self):
+        self.playaudio = 0
 
     def handle_input(self, event):
         pass
 
     def update(self):
-        pass
+        if self.playaudio == 0:
+            self.clock = pygame.time.get_ticks()
+            self.audio.play()
+            self.playaudio = 1
+
+        print(pygame.time.get_ticks())
+        if pygame.time.get_ticks() - self.clock > 5500:
+            return Scene.MAINMENU
+
 
     def render(self, screen):
         logo_font = load_font('PixelScript', 40)
