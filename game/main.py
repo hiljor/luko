@@ -43,7 +43,9 @@ while running:
                     debugmenu = not debugmenu
                 if event.key == pygame.K_ESCAPE:
                     debugmenu = not debugmenu
-            scenemanager.handle_input(event)
+            handled_event = scenemanager.handle_input(event)
+            if handled_event == "quit":
+                running = False
 
     scenemanager.update()
     #Handle GameLogic Updates:
