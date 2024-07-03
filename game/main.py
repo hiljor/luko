@@ -7,7 +7,9 @@ pygame.init()
 pygame.font.init()
 pygame.mixer.init()
 
+#Major Game Settings
 screen = pygame.display.set_mode([500, 500], pygame.RESIZABLE)
+pygame.display.set_caption('Luko')
 
 running = True
 debugmenu = False
