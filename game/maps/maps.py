@@ -18,17 +18,18 @@ class Map:
         self.nexts = sorted(self.starts)
         self.path = []
         self.selected = self.starts[0]
+        self._generate_rooms()
         
     def _generate_rooms(self):
         rf = RoomFactory()
         for i in range(len(self.points)):
-            self.rooms[i] = rf.newRoom()
+            self.rooms[i] = rf.randomizeRoom()
             # add boss room at end point location
             if self.points[i] == self.end:
-                self.rooms[i] = rf.newRoom('boss')
+                self.rooms[i] = rf.createRoom('boss')
             # add start room at start point location
             if self.points[i] in self.starts:
-                self.rooms[i] = rf.newRoom('start')
+                self.rooms[i] = rf.createRoom('start')
     
     def choose_location(self):
         self.path.append(self.selected)
@@ -38,8 +39,8 @@ class Map:
         self.selected = self.neighbours[self.current][0]
         self.nexts = sorted(self.neighbours[self.current])
         
-        # return event for room
-        return self.rooms[self.points.index(self.current)].getEvent()
+        # cause the room event to occur
+        self.rooms[self.points.index(self.current)].raise_event()
         
     def swap_selected_location(self, direction):
         index = self.nexts.index(self.selected)

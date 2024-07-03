@@ -1,5 +1,5 @@
 import pygame
-from fonts.fontManager import load_font
+from assets.assetManager import load_font
 from common import Scene
 
 class MainMenuScene:

@@ -1,7 +1,7 @@
 import random
 
 def generate_map(rows, cols, n_paths):
-    vertices = set()
+    vertices = []
     edges = []
     end_vertex = (random.randint(0, cols - 1), rows - 1)  # Chosen end vertex
     paths = []
@@ -30,13 +30,13 @@ def generate_map(rows, cols, n_paths):
     # Reverse paths to correct orientation and collect all vertices
     for path in paths:
         path.reverse()  # Now the path starts at the top (beginning) and ends at the end vertex
-        vertices.update(path)
+        vertices.extend(path)
 
     # Find the minimum column index to justify all paths to the left
     min_col = min([col for col, row in vertices])
     
     # Adjust all vertices by subtracting the minimum column index
-    justified_vertices = {(col - min_col, row) for (col, row) in vertices}
+    justified_vertices = [(col - min_col, row) for (col, row) in vertices]
     justified_paths = []
     for path in paths:
         justified_path = [(col - min_col, row) for (col, row) in path]
@@ -56,7 +56,7 @@ def generate_map(rows, cols, n_paths):
     for source, destination in edges:
         neighborhoods[source].append(destination)
 
-    return justified_vertices, edges, neighborhoods, start_vertices, end_vertex
+    return vertices, edges, neighborhoods, start_vertices, end_vertex
 
 # Example usage
 if __name__ == "__main__":

@@ -12,13 +12,17 @@ unique_rooms = {
     'boss': 'Boss'
 }
 
+valid_rooms = room_types | unique_rooms
+
+random_room_types = ['battle', 'recipe']
+
 class Room:
     
     class Battle:
         def __init__(self):
             pass
         
-        def get_event(self):
+        def raise_event(self):
             # Return a pygame event representing the battle room
             return pygame.event.Event(pygame.USEREVENT, {'room_type': 'battle'})
     
@@ -26,24 +30,24 @@ class Room:
         def __init__(self):
             pass
         
-        def get_event(self):
+        def raise_event(self):
             # Return a pygame event representing the recipe room
             return pygame.event.Event(pygame.USEREVENT, {'room_type': 'recipe'})
         
     class Random:
         def __init__(self):
+            self.room = random.choice(random_room_types)()
             pass
         
-        def get_event(self):
+        def raise_event(self):
             # Return a random pygame event representing one of the other room types
-            room_type = random.choice(['battle', 'recipe', 'boss', 'start'])
-            return pygame.event.Event(pygame.USEREVENT, {'room_type': room_type})
+            return self.room.raise_event()
         
     class Boss:
         def __init__(self):
             pass
         
-        def get_event(self):
+        def raise_event(self):
             # Return a pygame event representing the boss room
             return pygame.event.Event(pygame.USEREVENT, {'room_type': 'boss'})
 
@@ -51,7 +55,7 @@ class Room:
         def __init__(self):
             pass
         
-        def get_event(self):
+        def raise_event(self):
             # Return a pygame event representing the start room
             return pygame.event.Event(pygame.USEREVENT, {'room_type': 'start'})
         
@@ -60,11 +64,12 @@ class RoomFactory:
     def __init__(self):
         return
     
-    def newRoom(self, room_type: str) -> Room:
+    def createRoom(self, room_type:str='random') -> Room:
+        room_type = room_type.lower()
+        if room_type not in (valid_rooms):
+            raise ValueError(f'Invalid room type: {room_type}, must be one of {valid_rooms.keys()}')
         room_class = getattr(Room, room_type.title())
-        if room_class is None:
-            room_class = Room.Random
         return room_class()
 
-    def randomRoom(self) -> Room:
-        return Room.Random()
+    def randomizeRoom(self) -> Room:
+        return self.createRoom(random.choice(random_room_types))

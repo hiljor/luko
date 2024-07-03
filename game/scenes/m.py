@@ -1,5 +1,5 @@
 import pygame
-from fonts.fontManager import load_font
+from assets.assetManager import load_font
 
 class MScene:
     def __init__(self):

@@ -1,7 +1,7 @@
 import pygame
 from enum import Enum
 from scenemanager import SceneManager
-from fonts.fontManager import load_font
+from assets.assetManager import load_font
 
 pygame.init()
 pygame.font.init()
