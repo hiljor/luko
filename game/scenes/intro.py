@@ -1,5 +1,5 @@
 import pygame
-from fonts.fontManager import load_font
+from assets.assetManager import load_font, load_audio
 from common import Scene
 
 class IntroScene:
@@ -7,7 +7,7 @@ class IntroScene:
         self.bg_colour = (20, 20, 20)
         self.fg_colour = (0, 0, 30)
         self.playaudio = 0
-        self.audio = pygame.mixer.Sound("./audio/placeholder_song-ko.wav")
+        self.audio = load_audio('placeholder_song-ko.wav')
         self.audio.set_volume(0.7)
         self.clock = pygame.time.get_ticks()
         self.logo_font = load_font('PixelScript', 40)
