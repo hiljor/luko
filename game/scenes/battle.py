@@ -132,6 +132,7 @@ class BattleScene:
                 if self.deck.with_in(event.pos):
                     if self.phase == 0 and not self.pause:
                         self.deck.select()
+                        self.cardoppselected = random.randrange(3)
                         self.resultshow = False
                         self.deckselect = True
                         self.pause = True
@@ -225,15 +226,11 @@ class BattleScene:
                         self.card3.destroy()
                     self.frame += 1
                 if self.frame == 1 and pygame.time.get_ticks() - self.clock > 900:
-                    self.cardoppselected = random.randrange(3)
                     if self.cardoppselected == 0:
-                        self.cardopp1.select()
                         self.cardopp1.destroy()
                     if self.cardoppselected == 1:
-                        self.cardopp2.select()
                         self.cardopp2.destroy()
                     if self.cardoppselected == 2:
-                        self.cardopp3.select()
                         self.cardopp3.destroy()
                     self.frame += 1
                 if self.frame == 2 and pygame.time.get_ticks() - self.clock > 1200:
