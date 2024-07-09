@@ -1,5 +1,4 @@
 import pygame
-from enum import Enum
 from scenes.intro import IntroScene
 from scenes.mainmenu import MainMenuScene
 from scenes.map import MapScene
@@ -17,7 +16,7 @@ class SceneManager:
             Scene.MAINMENU: MainMenuScene(),
             Scene.MAP: MapScene(),
             Scene.ROOM: RoomScene(),
-            Scene.BATTLE: BattleScene(),
+            Scene.BATTLE: BattleScene().start(),
             Scene.GAMEOVER: GameOver(),
             Scene.CREDITS: CreditScene(),
             Scene.M: MScene()
